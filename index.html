@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Social Pizza - Riot / Firebase Demo</title>
+</head>
+<body>
+
+	<app></app>
+
+
+	<script src="tags/app.tag" type="riot/tag"></script>
+
+	<script src="https://cdn.jsdelivr.net/riot/3.1/riot+compiler.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.6.9/firebase.js"></script>
+
+	<script>
+		// Initialize Firebase
+		var config = {
+			apiKey: "AIzaSyDdq6BlNdd8kdBHmr8UAJhT8btN7qNXc-I",
+			authDomain: "socialpizza-7e9be.firebaseapp.com",
+			databaseURL: "https://socialpizza-7e9be.firebaseio.com",
+			storageBucket: "socialpizza-7e9be.appspot.com",
+			messagingSenderId: "850810753917"
+		};
+		firebase.initializeApp(config);
+
+		var storage = firebase.storage();
+		var database = firebase.database();
+
+		riot.mount('*');
+	</script>
+
+</body>
+</html>
