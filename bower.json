@@ -1,5 +1,5 @@
 {
-  "name": "SocialPizza",
+  "name": "socialpizza",
   "homepage": "https://github.com/jmk2142/SocialPizza",
   "authors": [
     "Jin Kuwata <jmk2142@tc.columbia.edu>"
@@ -13,5 +13,8 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "font-awesome": "fontawesome#^4.7.0"
+  }
 }
