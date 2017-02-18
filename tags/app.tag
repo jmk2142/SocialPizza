@@ -31,18 +31,18 @@
 		var earliest = '';
 
 		// The job of update might end up the job of the ref.
-		// pizzaRef.orderByChild('createdAt').endAt(earliest).limitToLast(3).on('value', function(snapshot){
-		// 	this.pizzas = snapshot.val();
-		//
-		// 	// TEST CONVERT to ARRAY STRUCTURE using lodash
-		// 	this.pizzaList = _.map(this.pizzas, function(pizza, key, list) {
-		// 		return _.extend(pizza, {key: key});
-		// 	});
-		// 	console.log(this.pizzaList);
-		// 	// BETTER for sorting?
-		//
-		// 	this.update();
-		// }.bind(this));
+		pizzaRef.orderByChild('createdAt').endAt(earliest).limitToLast(3).on('value', function(snapshot){
+			this.pizzas = snapshot.val();
+
+			// TEST CONVERT to ARRAY STRUCTURE using lodash
+			this.pizzaList = _.map(this.pizzas, function(pizza, key, list) {
+				return _.extend(pizza, {key: key});
+			});
+			// console.log(this.pizzaList);
+			// BETTER for sorting?
+
+			this.update();
+		}.bind(this));
 
 		/*
 			Kind of dawned on me...
@@ -71,23 +71,23 @@
 		*/
 
 		// Using promises / thenable
-		pizzaRef.orderByChild('createdAt').endAt(earliest).limitToLast(3).once('value').then(function(snapshot){
-			window.snapshot = snapshot;
-			console.log(snapshot)
-			this.pizzas = snapshot.val();
-
-			// TEST CONVERT to ARRAY STRUCTURE using lodash
-			this.pizzaList = _.map(this.pizzas, function(pizza, key, list) {
-				return _.extend(pizza, {key: key});
-			});
-			console.log(this.pizzaList);
-			// BETTER for sorting?
-
-			this.update();
-
-		}.bind(this), function(err){
-
-		});
+		// pizzaRef.orderByChild('createdAt').endAt(earliest).limitToLast(3).once('value').then(function(snapshot){
+		// 	window.snapshot = snapshot;
+		// 	console.log(snapshot)
+		// 	this.pizzas = snapshot.val();
+		//
+		// 	// TEST CONVERT to ARRAY STRUCTURE using lodash
+		// 	this.pizzaList = _.map(this.pizzas, function(pizza, key, list) {
+		// 		return _.extend(pizza, {key: key});
+		// 	});
+		// 	console.log(this.pizzaList);
+		// 	// BETTER for sorting?
+		//
+		// 	this.update();
+		//
+		// }.bind(this), function(err){
+		//
+		// });
 
 
 		makePizza(event) {
@@ -129,6 +129,7 @@
 	<style>
 		:scope {
 			display: block;
+			padding-top: 30px;
 		}
 		.gallery {
 			font-family: monospace;

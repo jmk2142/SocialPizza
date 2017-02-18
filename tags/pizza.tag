@@ -4,7 +4,7 @@
 	<span>{ key } --- { new Date(pizza.createdAt).toLocaleTimeString() } --- { pizza.title }</span><span show={ pizza.updatedAt }> --- EDITED: { new Date(pizza.updatedAt).toLocaleTimeString() }</span>
 
 	<script>
-		console.log('pizza.tag', this);
+		// var x = 1;
 	</script>
 
 	<style>
