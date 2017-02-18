@@ -1,10 +1,8 @@
 <pizza>
-	<i class="fa fa-fw fa-trash" onclick={ parent.delete }></i>
-	<i class="fa fa-fw fa-edit" onclick={ parent.edit }></i>
-	<span>{ key } --- { new Date(pizza.createdAt).toLocaleTimeString() } --- { pizza.title }</span><span show={ pizza.updatedAt }> --- EDITED: { new Date(pizza.updatedAt).toLocaleTimeString() }</span>
+	<i if={ this.pizza.uid === firebase.auth().currentUser.uid } class="fa fa-fw fa-trash" onclick={ parent.delete }></i><i if={ this.pizza.uid === firebase.auth().currentUser.uid } class="fa fa-fw fa-edit" onclick={ parent.edit }></i><span>{ key } --- { new Date(pizza.createdAt).toLocaleTimeString() } --- { pizza.title }</span><span show={ pizza.updatedAt }> --- EDITED: { new Date(pizza.updatedAt).toLocaleTimeString() }</span><span show={ pizza.author }> --- BY: { pizza.author }</span>
 
 	<script>
-		// var x = 1;
+		console.log(this);
 	</script>
 
 	<style>

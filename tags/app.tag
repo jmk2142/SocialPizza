@@ -9,11 +9,11 @@
 		<pizza each={ pizza, key in pizzas }></pizza>
 	</div>
 
-	<div class="gallery">
+	<!-- <div class="gallery">
 		<strong>ARRAY LIST</strong><br><br>
 		<pizza each={ pizza, key in pizzaList }></pizza>
 	</div>
-	<button onclick={ prevPage }>PREV</button>
+	<button onclick={ prevPage }>PREV</button> -->
 
 
 
@@ -31,7 +31,7 @@
 		var earliest = '';
 
 		// The job of update might end up the job of the ref.
-		pizzaRef.orderByChild('createdAt').endAt(earliest).limitToLast(3).on('value', function(snapshot){
+		pizzaRef.orderByChild('createdAt').endAt(earliest).limitToLast(7).on('value', function(snapshot){
 			this.pizzas = snapshot.val();
 
 			// TEST CONVERT to ARRAY STRUCTURE using lodash
@@ -96,8 +96,14 @@
 			}
 
 			var saved =	pizzaRef.push({
+				author: firebase.auth().currentUser.displayName,
+				uid: firebase.auth().currentUser.uid,
 				title: this.refs.title.value,
 				createdAt: firebase.database.ServerValue.TIMESTAMP
+			}).then(function(response){
+				console.log(response);
+			}).catch(function(error){
+			  alert(error.message + '\nProbably need to LOGIN first.');
 			});
 
 			this.resetForm(event);
@@ -111,7 +117,12 @@
 
 		delete(event) {
 			// pizzaRef.child(event.item.key).remove();
-			pizzaRef.child(event.item.pizza.key).remove();
+			pizzaRef.child(event.item.pizza.key).remove().catch(function(error){
+			  if (!firebase.auth().currentUser) {
+					alert('Need to LOGIN');
+					return false;
+				}
+			});
 		}
 
 		edit(event) {
