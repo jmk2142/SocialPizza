@@ -1,4 +1,5 @@
 <app>
+	<menu></menu>
 	<p>Pizza Art</p>
 	<input type="text" value="" ref="title" placeholder="Enter title of your pizza art" onkeypress={ makePizza }>
 	<button onclick={ makePizza }>MAKE PIZZA</button>
