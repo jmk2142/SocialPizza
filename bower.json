@@ -1,0 +1,17 @@
+{
+  "name": "SocialPizza",
+  "homepage": "https://github.com/jmk2142/SocialPizza",
+  "authors": [
+    "Jin Kuwata <jmk2142@tc.columbia.edu>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
