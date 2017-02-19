@@ -4,6 +4,11 @@ This is just a demonstration app (messy) to test out some of the basic features 
 
 Overall it's not so bad. I think I can narrow this demo down and clean it up into parts now that I understand the gist of the features and caveats.
 
+## Demonstration
+You can check out the demo on github pages at: https://jmk2142.github.io/SocialPizza.
+
+**NOTE:** The demo is _a lot cooler_ if you have two different computers looking at the same page at the same time. This is a _real-time_ app.
+
 ## Installation
 You need `bower` for this to work. See [Bower](https://bower.com) for details.
 
