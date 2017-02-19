@@ -1,5 +1,5 @@
 # SocialPizza
----
+
 This is just a demonstration app (messy) to test out some of the basic features of [Firebase](https://firebase.google.com) - namely the Database and Storage features.
 
 Overall it's not so bad. I think I can narrow this demo down and clean it up into parts now that I understand the gist of the features and caveats.
