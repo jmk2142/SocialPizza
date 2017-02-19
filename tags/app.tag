@@ -4,25 +4,51 @@
 	<input type="text" value="" ref="title" placeholder="Enter title of your pizza art" onkeypress={ makePizza }>
 	<button onclick={ makePizza }>MAKE PIZZA</button>
 
+	<progress value="0" max="100" ref="uploader">0%</progress>
+	<input type="file" ref="fileInput" onchange={ fileUpload } value="upload">
+
 	<div class="gallery">
 		<strong>OBJECT LIST</strong><br><br>
 		<pizza each={ pizza, key in pizzas }></pizza>
 	</div>
-
-	<!-- <div class="gallery">
-		<strong>ARRAY LIST</strong><br><br>
-		<pizza each={ pizza, key in pizzaList }></pizza>
-	</div>
-	<button onclick={ prevPage }>PREV</button> -->
-
-
 
 	<!-- EDITOR -->
 	<editor if={ editing } data={ editing }></editor>
 
 
 	<script>
+		var that = this;
 		console.log('app.tag');
+
+		this.fileUpload = function(event){
+			// Get file
+			var file = event.target.files[0];
+
+			// Create storage ref
+			var storageRef = firebase.storage().ref('photos/pizzas/' + file.name);
+
+			// Upload file
+			var task = storageRef.put(file);
+
+			// Update progress bar
+			task.on('state_changed', function(snapshot){
+				  var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+					console.log(percentage);
+					that.refs.uploader.value = percentage;
+					console.log('snapshot:', snapshot);
+				}, function error(err) {
+					console.log(err);
+				}, function complete(x) {
+					console.log('complete:', x);
+					that.refs.uploader.value = 0;
+					that.downloadURL = task.snapshot.downloadURL;
+			});
+
+			window.storageRef = storageRef;
+			console.log('storageRef:', storageRef);
+			console.log('task:', task);
+		};
 
 		this.pizzas = null;
 
@@ -35,9 +61,9 @@
 			this.pizzas = snapshot.val();
 
 			// TEST CONVERT to ARRAY STRUCTURE using lodash
-			this.pizzaList = _.map(this.pizzas, function(pizza, key, list) {
-				return _.extend(pizza, {key: key});
-			});
+			// this.pizzaList = _.map(this.pizzas, function(pizza, key, list) {
+			// 	return _.extend(pizza, {key: key});
+			// });
 			// console.log(this.pizzaList);
 			// BETTER for sorting?
 
@@ -70,43 +96,30 @@
 			firebase.database().ref().update(updates);
 		*/
 
-		// Using promises / thenable
-		// pizzaRef.orderByChild('createdAt').endAt(earliest).limitToLast(3).once('value').then(function(snapshot){
-		// 	window.snapshot = snapshot;
-		// 	console.log(snapshot)
-		// 	this.pizzas = snapshot.val();
-		//
-		// 	// TEST CONVERT to ARRAY STRUCTURE using lodash
-		// 	this.pizzaList = _.map(this.pizzas, function(pizza, key, list) {
-		// 		return _.extend(pizza, {key: key});
-		// 	});
-		// 	console.log(this.pizzaList);
-		// 	// BETTER for sorting?
-		//
-		// 	this.update();
-		//
-		// }.bind(this), function(err){
-		//
-		// });
-
 
 		makePizza(event) {
+			event.preventUpdate = true;
+
 			if (event.type === "keypress" && event.which !== 13) {
 				return false;
 			}
 
-			var saved =	pizzaRef.push({
-				author: firebase.auth().currentUser.displayName,
-				uid: firebase.auth().currentUser.uid,
-				title: this.refs.title.value,
-				createdAt: firebase.database.ServerValue.TIMESTAMP
-			}).then(function(response){
-				console.log(response);
-			}).catch(function(error){
-			  alert(error.message + '\nProbably need to LOGIN first.');
-			});
+			if (firebase.auth().currentUser) {
+				var saved =	pizzaRef.push({
+					author: firebase.auth().currentUser.displayName,
+					uid: firebase.auth().currentUser.uid,
+					title: this.refs.title.value,
+					createdAt: firebase.database.ServerValue.TIMESTAMP,
+					imageURL: this.downloadURL ? this.downloadURL : null
+				}).then(function(response){
+					console.log(response);
+					that.downloadURL = null;
+				});
 
-			this.resetForm(event);
+				this.resetForm(event);
+			} else {
+				alert('LOGIN to WRITE');
+			}
 		}
 
 		resetForm(event) {
@@ -116,9 +129,8 @@
 		}
 
 		delete(event) {
-			// pizzaRef.child(event.item.key).remove();
-			pizzaRef.child(event.item.pizza.key).remove().catch(function(error){
-			  if (!firebase.auth().currentUser) {
+			pizzaRef.child(event.item.key).remove().catch(function(error){
+				if (!firebase.auth().currentUser) {
 					alert('Need to LOGIN');
 					return false;
 				}
